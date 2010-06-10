@@ -1,12 +1,4 @@
 class mcollective::install {
-  yumrepo { "mcollective":
-    descr => "Mcollective",
-    baseurl => "http://sinla011.sin.infineon.com/yum",
-    enabled => "1",
-    gpgcheck => "0"
-  }
-
-  Package {require => Yumrepo["mcollective"]}
   case $operatingsystem {
     ubuntu,debian: { include mcollective::install::debian }
     redhat,centos: { include mcollective::install::redhat }
