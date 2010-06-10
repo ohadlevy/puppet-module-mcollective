@@ -8,10 +8,24 @@ class mcollective::client {
 class mcollective::client::actual {
   include mcollective::client::install
   include mcollective::client::plugins
+  include mcollective::client::config
 }
 
 class mcollective::client::install {
   package { "mcollective-client": ensure => present }
+}
+
+class mcollective::client::config {
+
+  file { "/etc/mcollective/client.cfg":
+    content => template("mcollective/client.cfg.erb"),
+    mode    => 0440, owner   => root,
+    group   => $mcollective::client_group ? {
+      "" => "root",
+      default => $mcollective::client_group
+    },
+    require => Class["mcollective::client::install"]
+  }
 }
 
 class mcollective::client::plugins {
@@ -27,4 +41,5 @@ class mcollective::client::plugins {
   file { "${bin_dir}/mc-package": source => "${s_base}/agent/package/mc-package" }
   file { "${bin_dir}/mc-nrpe":    source => "${s_base}/agent/nrpe/mc-nrpe" }
   file { "${bin_dir}/mc-puppetd": source => "${s_base}/agent/puppetd/mc-puppetd" }
+  file { "${bin_dir}/mc-filemgr": source => "${s_base}/agent/filemgr/mc-filemgr" }
 }
