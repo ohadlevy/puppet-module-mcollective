@@ -14,8 +14,7 @@ class mcollective::config {
 
   file { "/etc/mcollective":
     ensure => directory,
-    owner => root, group => root, mode  => 0750,
-    require => Class["mcollective::install"]
+    mode  => 0750,
   }
   file { "/etc/mcollective/server.cfg":
     content => template("mcollective/server.cfg.erb"),
